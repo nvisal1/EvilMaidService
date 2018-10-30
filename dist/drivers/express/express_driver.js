@@ -4,7 +4,6 @@ var express = require("express");
 var http = require("http");
 var express_public_route_driver_1 = require("./express_public_route_driver");
 var express_auth_route_driver_1 = require("./express_auth_route_driver");
-var jwt_config_1 = require("../../middleware/jwt.config");
 var ExpressDriver = /** @class */ (function () {
     function ExpressDriver() {
     }
@@ -12,12 +11,12 @@ var ExpressDriver = /** @class */ (function () {
         // Set our public api routes
         this.app.use('/', express_public_route_driver_1.ExpressPublicRouteDriver.buildRouter(dataStore));
         // Set Validation Middleware
-        this.app.use(jwt_config_1.enforceTokenAccess);
-        this.app.use(function (error, req, res, next) {
-            if (error.name === 'UnauthorizedError') {
-                res.status(401).send('Invalid Access Token');
-            }
-        });
+        // this.app.use(enforceTokenAccess);
+        // this.app.use((error: any, req: any, res: any, next: any) => {
+        //     if (error.name === 'UnauthorizedError') {
+        //         res.status(401).send('Invalid Access Token');
+        //     }
+        // });
         // Set our authenticated api routes
         this.app.use('/', express_auth_route_driver_1.ExpressAuthRouteDriver.buildRouter(dataStore));
         // Allow Proxy
