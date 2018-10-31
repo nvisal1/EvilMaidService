@@ -1,6 +1,5 @@
 import * as jwt from 'express-jwt';
 
-
 export const enforceTokenAccess = jwt({
   secret: process.env.KEY,
   issuer: process.env.ISSUER,

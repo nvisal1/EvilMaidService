@@ -14,12 +14,29 @@ export class MongoDriver implements DataStore {
 
     private async connect(dbURI: string) {
         try {
-            this.mongoClient = await MongoClient.connect(dbURI);
+            this.mongoClient = await MongoClient.connect(dbURI, { useNewUrlParser: true });
             this.db = this.mongoClient.db();
         } catch (e) {
             return Promise.reject(
                 'Problem connecting to database at ' + dbURI + ':\n\t' + e,
             );
+        }
+    }
+
+    /**
+     * 
+     * @param query: Object - This is where our query will be injected!
+     * THIS IS OUR VULNERABLE ROUTE!
+     */
+    async fetchSearchResults(
+        query: Object
+    ): Promise<Blog[]> {
+        try {
+            const blogsCursor = await this.db.collection<Blog>('blogs').find({query});
+            const blogs = blogsCursor.toArray();
+            return blogs;
+        } catch (error) {
+            return Promise.reject(error);
         }
     }
     
