@@ -1,4 +1,4 @@
-import { Blog } from "../types/blog";
+import { Blog, User } from "../types/blog";
 
 export interface DataStore {
     createBlog(blog: Blog): Promise<void>;
@@ -7,4 +7,5 @@ export interface DataStore {
     getBlogs(): Promise<Blog[]>;
     getUserBlogs(username: String): Promise<Blog[]>;
     getBlog(blogId: String): Promise<Blog>;
+    register(User: User): Promise<void>;
 }

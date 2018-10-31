@@ -94,7 +94,7 @@ export class MongoDriver implements DataStore {
         user: User
     ): Promise<void> {
         try {
-            await this.db.collection<User>('user').insert(user);
+            await this.db.collection<User>('users').insert(user);
         } catch (error) {
             return Promise.reject(error);
         }

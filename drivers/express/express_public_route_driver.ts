@@ -22,23 +22,31 @@ export class ExpressPublicRouteDriver {
     }
 
     // Private Handler Methods
-    private handleGetAllBlogs(req: Request, res: Response) {
-        BlogInteractor.getAllBlogs(this.dataStore);
-    }
-
-    private handleGetUserBlogs(req: Request, res: Response) {
-        const userId = req.params.userID;
+    private async handleGetAllBlogs(req: Request, res: Response) {
         try {
-            BlogInteractor.getUserBlogs(
-                this.dataStore,
-                userId
-            );
+            const blogs = await BlogInteractor.getAllBlogs(this.dataStore);
+            res.status(200).send(blogs);
         } catch (error) {
             console.error(error);
+            res.status(500).send(error);
         }
     }
 
-    private handleUserRegistration(req: Request, res: Response) {
+    private async handleGetUserBlogs(req: Request, res: Response) {
+        const userId = req.params.userID;
+        try {
+            const blogs = await BlogInteractor.getUserBlogs(
+                this.dataStore,
+                userId
+            );
+            res.status(200).send(blogs);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error);
+        }
+    }
+
+    private async handleUserRegistration(req: Request, res: Response) {
         const newUser: User = req.body.user;
         try {
             UserInteractor.register(
@@ -47,10 +55,11 @@ export class ExpressPublicRouteDriver {
             );
         } catch (error) {
             console.error(error);
+            res.send(500).send(error);
         }
     }
 
-    private handleUserLogin(req: Request, res: Response) {
+    private async handleUserLogin(req: Request, res: Response) {
         // This object holds username and password
         const loginCreds = req.body.user;
         try {
@@ -61,6 +70,7 @@ export class ExpressPublicRouteDriver {
             );
         } catch(error) {
             console.error(error);
+            res.status(500).send(error);
         }
     }
 

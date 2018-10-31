@@ -5,8 +5,13 @@ export class UserInteractor {
 
     static register(
         dataStore: DataStore,
-        newUser: User) {
-        
+        newUser: User
+    ): Promise<void> {
+        try {
+            dataStore.register(newUser);
+        } catch (error) {
+            return Promise.reject(error);
+        }
     }
 
     static login(

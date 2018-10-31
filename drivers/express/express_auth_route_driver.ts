@@ -34,8 +34,10 @@ export class ExpressAuthRouteDriver {
                 this.dataStore,
                 blog
             );
+            res.sendStatus(200);
         } catch (error) {
             console.error(error);
+            res.status(500).send(error);
         }   
     }
 
@@ -47,8 +49,10 @@ export class ExpressAuthRouteDriver {
                 this.dataStore,
                 editBlog
             );
+            res.sendStatus(200);
         } catch (error) {
             console.error(error);
+            res.status(500).send(error);
         }
     }
 
@@ -59,13 +63,19 @@ export class ExpressAuthRouteDriver {
                 this.dataStore,
                 blogId
             );
+            res.sendStatus(200);
         } catch (error) {
             console.error(error);
+            res.status(500).send(error);
         }
     }
 
     private handleLogout(res: Response, req: Request) {
-        UserInteractor.logout();
+        try {
+            UserInteractor.logout();
+        } catch (error) {
+
+        }
     }
 
     public setBlogRoutes(router: Router): void {
