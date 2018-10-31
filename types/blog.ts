@@ -3,3 +3,9 @@ export type Blog  = {
     body: String,
     author: String,
 }
+
+export type User = {
+    username: String,
+    password: String,
+    email: String
+}

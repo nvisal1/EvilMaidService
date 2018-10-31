@@ -1,15 +1,23 @@
-
+import { User } from "../types/blog";
+import { DataStore } from "../interfaces/datastore";
 
 export class UserInteractor {
 
-    static register() {
+    static register(
+        dataStore: DataStore,
+        newUser: User) {
         
     }
 
-    static login() {
+    static login(
+        dataStore: DataStore,
+        username: String,
+        password: String
+    ) {
 
     }
 
+    // TODO: Can probably just remove cookie from within route driver
     static logout() {
 
     }

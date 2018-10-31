@@ -1,24 +1,40 @@
+import { Blog } from "../types/blog";
+import { DataStore } from "../interfaces/datastore";
 
 
 export class BlogInteractor {
 
-    static getAllBlogs() {
+    static getAllBlogs(
+        dataStore: DataStore
+    ) {
 
     }
 
-    static getUserBlogs() {
+    static getUserBlogs(
+        dataStore: DataStore,
+        userId: String
+    ) {
 
     }    
     
-    static postBlog() {
+    static postBlog(
+        dataStore: DataStore,
+        blog: Blog
+    ) {
 
     }
 
-    static editBlog() {
+    static editBlog(
+        dataStore: DataStore,
+        editBlog: Blog
+    ) {
 
     }
 
-    static deleteBlog() {
+    static deleteBlog(
+        dataStore: DataStore,
+        blogId: String
+    ) {
         
     }
 }

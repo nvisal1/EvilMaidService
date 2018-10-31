@@ -1,5 +1,5 @@
 import { DataStore } from "../../interfaces/datastore";
-import { Router, Response } from "express";
+import { Router, Response, Request } from "express";
 import { BlogInteractor } from "../../interactors/blog_interactor";
 import { UserInteractor } from "../../interactors/user_interactor";
 // tslint:disable-next-line:no-require-imports
@@ -27,19 +27,44 @@ export class ExpressAuthRouteDriver {
         });
     }
 
-    private handlePostBlog() {
-        BlogInteractor.postBlog();
+    private handlePostBlog(res: Response, req: Request) {
+        const blog = req.body.blog;
+        try {
+            BlogInteractor.postBlog(
+                this.dataStore,
+                blog
+            );
+        } catch (error) {
+            console.error(error);
+        }   
     }
 
-    private handleEditBlog() {
-        BlogInteractor.editBlog();
+    private handleEditBlog(res: Response, req: Request) {
+        const editBlog = req.body.blog;
+        const blogId = req.params.blogID;
+        try {
+            BlogInteractor.editBlog(
+                this.dataStore,
+                editBlog
+            );
+        } catch (error) {
+            console.error(error);
+        }
     }
 
-    private handleDeleteBlog() {
-        BlogInteractor.deleteBlog();
+    private handleDeleteBlog(res: Response, req: Request) {
+        const blogId = req.params.blogID;
+        try {
+            BlogInteractor.deleteBlog(
+                this.dataStore,
+                blogId
+            );
+        } catch (error) {
+            console.error(error);
+        }
     }
 
-    private handleLogout() {
+    private handleLogout(res: Response, req: Request) {
         UserInteractor.logout();
     }
 
@@ -48,15 +73,16 @@ export class ExpressAuthRouteDriver {
         router.get('/', async (req, res) => {this.handleDefaultRoute(res)});
 
         // Post New Blog
-        router.route('/users/:username/blogs').post(async (req, res) => {this.handlePostBlog()})
-            // Edit Blog
-            .patch(async (req, res) => {this.handleEditBlog()})
+        router.route('/users/:username/blogs').post(async (req, res) => {this.handlePostBlog(res, req)})
+            
+        // Edit Blog
+        router.route('users/:username/blogs/:blogID').patch(async (req, res) => {this.handleEditBlog(res, req)})
             // Delete Blog
-            .delete(async (req, res) => {this.handleDeleteBlog()});
+            .delete(async (req, res) => {this.handleDeleteBlog(res, req)});
     }
 
     public setUserRoutes(router: Router): void {
         // Logout
-        router.delete('users/:username/tokens', async (req, res) => {this.handleLogout()});
+        router.delete('users/:username/tokens', async (req, res) => {this.handleLogout(res, req)});
     }
 }
