@@ -242,24 +242,21 @@ var MongoDriver = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log(user);
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
+                        _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.db.collection('users').find({
                                 username: user['username'],
                                 password: user['password']
                             }).toArray()];
-                    case 2:
+                    case 1:
                         result = _a.sent();
                         if (result.length > 0) {
                             return [2 /*return*/, result[0]];
                         }
                         return [2 /*return*/, false];
-                    case 3:
+                    case 2:
                         error_9 = _a.sent();
                         return [2 /*return*/, Promise.reject(error_9)];
-                    case 4: return [2 /*return*/];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
