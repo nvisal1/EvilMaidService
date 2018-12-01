@@ -3,6 +3,8 @@ import { Router, Request, Response } from "express";
 import { BlogInteractor } from "../../interactors/blog_interactor";
 import { UserInteractor } from "../../interactors/user_interactor";
 import { User } from "../../types/blog";
+// tslint:disable-next-line:no-require-imports
+const version = require('../../../package.json').version;
 
 export class ExpressPublicRouteDriver {
 
@@ -20,6 +22,15 @@ export class ExpressPublicRouteDriver {
         publicRouter.setUserRoutes(router);
         return router;
     }
+
+      // Private Handler Methods
+      private handleDefaultRoute(res: Response) {
+        res.json({
+            version,
+            message: `Welcome to the EVIL MAID' API v${version}`,
+        });
+    }
+
 
     // Private Handler Methods
     private async handleGetAllBlogs(req: Request, res: Response) {
@@ -46,6 +57,15 @@ export class ExpressPublicRouteDriver {
         }
     }
 
+    /**
+     * 
+     * This route provides random content for the evil maid modal
+     * 
+     */
+    private handleEvilMaidAttack(req: Request, res: Response) {
+        
+    }
+
     private async handleUserRegistration(req: Request, res: Response) {
         const newUser: User = req.body.user;
         try {
@@ -61,13 +81,16 @@ export class ExpressPublicRouteDriver {
 
     private async handleUserLogin(req: Request, res: Response) {
         // This object holds username and password
-        const loginCreds = req.body.user;
+        const loginCreds = req.body;
         try {
-            UserInteractor.login(
+            const user = await UserInteractor.login(
                 this.dataStore,
-                loginCreds.username,
-                loginCreds.password
+                loginCreds
             );
+
+            if (user != false) {
+                res.status(400).send('Invalid Username or Password');
+            }
         } catch(error) {
             console.error(error);
             res.status(500).send(error);
@@ -75,18 +98,15 @@ export class ExpressPublicRouteDriver {
     }
 
     public setBlogRoutes(router: Router): void {
-        // Get all blogs
-        router.get('/blogs', async (req, res) => {this.handleGetAllBlogs(req, res)});
-
-        // Get User blogs
-        router.get('/users/:username/blogs', async (req, res) => {this.handleGetUserBlogs(req, res)});
+        // Default Route
+        router.get('/', async (req, res) => {this.handleDefaultRoute(res)});
     }
 
     public setUserRoutes(router: Router): void {
-        // Register
-        router.post('/users', async (req, res) => {this.handleUserRegistration(req, res)});
-
         // Login
         router.post('/users/tokens', async (req, res) => {this.handleUserLogin(req, res)});
     }    
+
+    public setEVILMAIDRoute(router: Router): void {
+    }
 }

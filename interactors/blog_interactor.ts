@@ -4,8 +4,14 @@ import { DataStore } from "../interfaces/datastore";
 
 export class BlogInteractor {
 
+    /**
+     * INJECTION DATA FLOWS THROUGH HERE!
+     * @param dataStore 
+     * @param query THIS IS THE INJECTION QUERY
+     */
     static getAllBlogs(
-        dataStore: DataStore
+        dataStore: DataStore,
+        query?: String
     ): Promise<Blog[]> {
         try {
             dataStore.getBlogs();

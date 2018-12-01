@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { DataStore } from '../../interfaces/datastore';
 import * as http from 'http';
+import * as bodyParser from 'body-parser';
 import { ExpressPublicRouteDriver } from './express_public_route_driver';
 import { ExpressAuthRouteDriver } from './express_auth_route_driver';
 import { enforceTokenAccess } from '../../middleware/jwt.config';
@@ -8,8 +9,12 @@ import { enforceTokenAccess } from '../../middleware/jwt.config';
 export class ExpressDriver {
 
     static app = express();
+    
 
     static start(dataStore: DataStore) {
+
+        this.app.use(bodyParser.urlencoded({ extended: true }));
+        this.app.use(bodyParser.json());
 
         // Set our public api routes
         this.app.use(
@@ -37,7 +42,7 @@ export class ExpressDriver {
         /**
          * Get port from environment and store in Express.
          */
-        const port = process.env.PORT || '3000';
+        const port = process.env.PORT || '3002';
         this.app.set('port', port);
 
         /**

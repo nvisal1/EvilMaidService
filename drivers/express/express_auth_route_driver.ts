@@ -19,14 +19,6 @@ export class ExpressAuthRouteDriver {
         return router;
     }
 
-    // Private Handler Methods
-    private handleDefaultRoute(res: Response) {
-        res.json({
-            version,
-            message: `Welcome to the EVIL MAID' API v${version}`,
-        });
-    }
-
     private handlePostBlog(res: Response, req: Request) {
         const blog = req.body.blog;
         try {
@@ -79,20 +71,8 @@ export class ExpressAuthRouteDriver {
     }
 
     public setBlogRoutes(router: Router): void {
-        // Default Route
-        router.get('/', async (req, res) => {this.handleDefaultRoute(res)});
-
-        // Post New Blog
-        router.route('/users/:username/blogs').post(async (req, res) => {this.handlePostBlog(res, req)})
-            
-        // Edit Blog
-        router.route('users/:username/blogs/:blogID').patch(async (req, res) => {this.handleEditBlog(res, req)})
-            // Delete Blog
-            .delete(async (req, res) => {this.handleDeleteBlog(res, req)});
     }
 
     public setUserRoutes(router: Router): void {
-        // Logout
-        router.delete('users/:username/tokens', async (req, res) => {this.handleLogout(res, req)});
     }
 }

@@ -23,11 +23,6 @@ export class MongoDriver implements DataStore {
         }
     }
 
-    /**
-     * 
-     * @param query: Object - This is where our query will be injected!
-     * THIS IS OUR VULNERABLE ROUTE!
-     */
     async fetchSearchResults(
         query: Object
     ): Promise<Blog[]> {
@@ -71,10 +66,23 @@ export class MongoDriver implements DataStore {
         }
     }
 
-    async getBlogs(): Promise<Blog[]> {
+    /**
+     * 
+     * @param query: Object - This is where our query will be injected!
+     * THIS IS OUR VULNERABLE ROUTE!
+     */
+    async getBlogs(
+        query?: Object
+    ): Promise<Blog[]> {
+        let blogsCursor;
         try {
-            // Fetch every blog from the blogs collection
-            const blogsCursor = await this.db.collection<Blog>('blogs').find();
+            if (query) {
+                // If the malicious query exists, inject it!
+                blogsCursor = await this.db.collection<Blog>('blogs').find(query);
+            } else {
+                // Fetch every blog from the blogs collection
+                blogsCursor = await this.db.collection<Blog>('blogs').find();
+            }
             const blogs = blogsCursor.toArray();
             return blogs;
         } catch (error) {
@@ -112,6 +120,24 @@ export class MongoDriver implements DataStore {
     ): Promise<void> {
         try {
             await this.db.collection<User>('users').insert(user);
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    }
+
+    async findUser(
+        user: object
+    ): Promise<User> {
+        console.log(user);
+        try {
+            const result  = await this.db.collection<User>('users').find(
+                {
+                    username: user['username'], 
+                    password: user['password']
+                }
+            ).toArray();
+
+            return result[0];
         } catch (error) {
             return Promise.reject(error);
         }

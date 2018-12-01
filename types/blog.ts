@@ -5,7 +5,6 @@ export type Blog  = {
 }
 
 export type User = {
-    username: String,
-    password: String,
-    email: String
+    username: string,
+    password: string,
 }
