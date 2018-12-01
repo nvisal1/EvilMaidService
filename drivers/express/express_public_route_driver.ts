@@ -27,7 +27,7 @@ export class ExpressPublicRouteDriver {
       private handleDefaultRoute(res: Response) {
         res.json({
             version,
-            message: `Welcome to the EVIL MAID' API v${version}`,
+            message: `Welcome to the EVIL MAID API v${version}`,
         });
     }
 
@@ -93,7 +93,7 @@ export class ExpressPublicRouteDriver {
             } else {
                 res.status(200).send(user);
             }
-            
+
         } catch(error) {
             console.error(error);
             res.status(500).send(error);
