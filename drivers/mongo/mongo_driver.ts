@@ -127,8 +127,7 @@ export class MongoDriver implements DataStore {
 
     async findUser(
         user: object
-    ): Promise<User> {
-        console.log(user);
+    ): Promise<any> {
         try {
             const result  = await this.db.collection<User>('users').find(
                 {
@@ -137,7 +136,11 @@ export class MongoDriver implements DataStore {
                 }
             ).toArray();
 
-            return result[0];
+            if (result.length > 0) {
+                return result[0];
+            }
+            return false;
+            
         } catch (error) {
             return Promise.reject(error);
         }

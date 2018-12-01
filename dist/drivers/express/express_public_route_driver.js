@@ -38,6 +38,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var blog_interactor_1 = require("../../interactors/blog_interactor");
 var user_interactor_1 = require("../../interactors/user_interactor");
+// tslint:disable-next-line:no-require-imports
+var version = require('../../../package.json').version;
 var ExpressPublicRouteDriver = /** @class */ (function () {
     function ExpressPublicRouteDriver(dataStore) {
         this.dataStore = dataStore;
@@ -48,6 +50,13 @@ var ExpressPublicRouteDriver = /** @class */ (function () {
         publicRouter.setBlogRoutes(router);
         publicRouter.setUserRoutes(router);
         return router;
+    };
+    // Private Handler Methods
+    ExpressPublicRouteDriver.prototype.handleDefaultRoute = function (res) {
+        res.json({
+            version: version,
+            message: "Welcome to the EVIL MAID' API v" + version,
+        });
     };
     // Private Handler Methods
     ExpressPublicRouteDriver.prototype.handleGetAllBlogs = function (req, res) {
@@ -122,41 +131,44 @@ var ExpressPublicRouteDriver = /** @class */ (function () {
     };
     ExpressPublicRouteDriver.prototype.handleUserLogin = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var loginCreds;
+            var loginCreds, user, error_3;
             return __generator(this, function (_a) {
-                loginCreds = req.body;
-                try {
-                    user_interactor_1.UserInteractor.login(this.dataStore, loginCreds);
+                switch (_a.label) {
+                    case 0:
+                        loginCreds = req.body;
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, user_interactor_1.UserInteractor.login(this.dataStore, loginCreds)];
+                    case 2:
+                        user = _a.sent();
+                        if (user === false) {
+                            res.status(400).send('Invalid Username or Password');
+                        }
+                        else {
+                            res.status(200).send(user);
+                        }
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_3 = _a.sent();
+                        console.error(error_3);
+                        res.status(500).send(error_3);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
-                catch (error) {
-                    console.error(error);
-                    res.status(500).send(error);
-                }
-                return [2 /*return*/];
             });
         });
     };
     ExpressPublicRouteDriver.prototype.setBlogRoutes = function (router) {
         var _this = this;
-        // Get all blogs
-        // Vulnerable Route! Because of optional query param
-        router.get('/blogs', function (req, res) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-            this.handleGetAllBlogs(req, res);
-            return [2 /*return*/];
-        }); }); });
-        // Get User blogs
-        router.get('/users/:username/blogs', function (req, res) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-            this.handleGetUserBlogs(req, res);
+        // Default Route
+        router.get('/', function (req, res) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+            this.handleDefaultRoute(res);
             return [2 /*return*/];
         }); }); });
     };
     ExpressPublicRouteDriver.prototype.setUserRoutes = function (router) {
         var _this = this;
-        // Register
-        router.post('/users', function (req, res) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-            this.handleUserRegistration(req, res);
-            return [2 /*return*/];
-        }); }); });
         // Login
         router.post('/users/tokens', function (req, res) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
             this.handleUserLogin(req, res);
@@ -164,11 +176,6 @@ var ExpressPublicRouteDriver = /** @class */ (function () {
         }); }); });
     };
     ExpressPublicRouteDriver.prototype.setEVILMAIDRoute = function (router) {
-        var _this = this;
-        router.get('/evilmaid', function (req, res) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-            this.handleEvilMaidAttack(req, res);
-            return [2 /*return*/];
-        }); }); });
     };
     return ExpressPublicRouteDriver;
 }());

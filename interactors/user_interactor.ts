@@ -18,14 +18,17 @@ export class UserInteractor {
     static async login(
         dataStore: DataStore,
         loginCreds: object
-    ) {
+    ): Promise<any> {
         try {
             const user = await dataStore.findUser(loginCreds);
-            if (user != null) {
+            if (user === false) {
+                return false;
+            } else {
                 const token = TokenManager.generateToken(user);
-                return { token, user: user };
+                delete user.password;
+                delete user['_id'];
+                return { token: token, user: user };
             }
-            return false;
         } catch (error) {
             return Promise.reject(error);
         }

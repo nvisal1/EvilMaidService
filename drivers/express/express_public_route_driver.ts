@@ -88,9 +88,12 @@ export class ExpressPublicRouteDriver {
                 loginCreds
             );
 
-            if (user != false) {
+            if (user === false) {
                 res.status(400).send('Invalid Username or Password');
+            } else {
+                res.status(200).send(user);
             }
+            
         } catch(error) {
             console.error(error);
             res.status(500).send(error);

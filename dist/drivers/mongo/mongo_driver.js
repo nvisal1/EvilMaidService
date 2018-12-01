@@ -252,8 +252,10 @@ var MongoDriver = /** @class */ (function () {
                             }).toArray()];
                     case 2:
                         result = _a.sent();
-                        console.log(result);
-                        return [3 /*break*/, 4];
+                        if (result.length > 0) {
+                            return [2 /*return*/, result[0]];
+                        }
+                        return [2 /*return*/, false];
                     case 3:
                         error_9 = _a.sent();
                         return [2 /*return*/, Promise.reject(error_9)];

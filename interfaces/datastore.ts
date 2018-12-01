@@ -9,5 +9,5 @@ export interface DataStore {
     getUserBlogs(username: String): Promise<Blog[]>;
     getBlog(blogId: String): Promise<Blog>;
     register(User: User): Promise<void>;
-    findUser(loginCreds: object): Promise<User>;
+    findUser(loginCreds: object): Promise<any>;
 }
