@@ -1,6 +1,7 @@
 import { DataStore } from "../../interfaces/datastore";
 import { Blog, User } from "../../types/blog";
 import { MongoClient, Db } from "mongodb";
+var escape = require('evil-maid-escape').escape
 
 export class MongoDriver implements DataStore {
 
@@ -129,9 +130,14 @@ export class MongoDriver implements DataStore {
         user: object
     ): Promise<any> {
         try {
+            // const username = escape(user['username']);
+            // const password = escape(user['password']);
+            // console.log(username);
+            // console.log(password);
+
             const result  = await this.db.collection<User>('users').find(
                 {
-                    username: user['username'], 
+                    username: user['username'],
                     password: user['password']
                 }
             ).toArray();

@@ -83,6 +83,7 @@ export class ExpressPublicRouteDriver {
         // This object holds username and password
         const loginCreds = req.body;
         try {
+            console.log(loginCreds);
             const user = await UserInteractor.login(
                 this.dataStore,
                 loginCreds

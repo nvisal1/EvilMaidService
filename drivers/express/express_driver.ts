@@ -5,6 +5,7 @@ import * as bodyParser from 'body-parser';
 import { ExpressPublicRouteDriver } from './express_public_route_driver';
 import { ExpressAuthRouteDriver } from './express_auth_route_driver';
 import { enforceTokenAccess } from '../../middleware/jwt.config';
+import * as cors from 'cors';
 
 export class ExpressDriver {
 
@@ -15,6 +16,14 @@ export class ExpressDriver {
 
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(bodyParser.json());
+
+        this.app.use(
+            cors({
+              origin: true,
+              credentials: true,
+            }),
+          );
+
 
         // Set our public api routes
         this.app.use(
