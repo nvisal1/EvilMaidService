@@ -90,7 +90,7 @@ export class ExpressPublicRouteDriver {
             );
 
             if (user === false) {
-                res.status(400).send('Invalid Username or Password');
+                res.status(401).send('Invalid Username or Password');
             } else {
                 res.status(200).send(user);
             }
